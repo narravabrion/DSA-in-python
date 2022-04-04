@@ -27,9 +27,9 @@ class LinkedList:
         self.head = new_node
 
     # insert after node
-    def insert_after(self, prev_node, new_data):
+    def insert_after_node(self, prev_node, new_data):
         # check if node exists
-        if prev_node is Node:
+        if prev_node is None:
             raise Exception("Previous node does not exist")
         # create new node
         new_node = Node(new_data)
@@ -52,6 +52,79 @@ class LinkedList:
             last = last.next
         # append to end of list
         last.next = new_node
+    # delete at node
+    def delete_node(self,key):
+        temp = self.head
+        # if the head contains the key
+        if temp is not None:
+            if temp.data == key:
+                self.head = temp.next #set head to the next node
+                temp = None # free up space occupied by the node
+                return
+        # search for key in the list while keeping track of the previous node
+        while(temp):
+            if temp.data == key:
+                break
+            prev = temp
+            temp = temp.next
+        
+        #  if list if empty or key not in list
+        if(temp is None):
+            # return
+            raise Exception('Key not in list')
+            
+        # unlink the node to be deleted from the list
+        prev.next = temp.next
+        temp = None
+    
+    # delete at given position
+    def del_at_position(self,position):
+        # check if the list is empty
+        if self.head == None:
+            return
+        # check if the position is 0 then just delete the head 
+        if position == 0:
+            self.head = self.head.next
+            return self.head
+        # traverse the list looking for the position
+        #  keep track of the list index, current node, previous node 
+        index =0
+        current = self.head
+        prev = self.head 
+        temp = self.head
+
+        while current is not None:
+            if index ==position:
+                temp= current.next
+                break
+            prev = current
+            current = current.next
+            index +=1
+        prev.next = temp
+        return prev
+    # sort list
+    def sort_list(self):
+        current = self.head
+        index= Node(None)
+        if current is None:
+            return
+        while current is not None:
+            index = current.next
+            while index is not None:
+                if current.data>index.data:
+                    current.data, index.data = index.data, current.data
+                index = index.next
+            current = current.next
+    
+    def __repr__(self):
+        node = self.head
+        nodes = []
+        while node is not None:
+            nodes.append(node.data)
+            node = node.next
+        nodes.append("None")
+        return " -> ".join(nodes)
+
 
 
 if __name__ == "__main__":
@@ -59,14 +132,15 @@ if __name__ == "__main__":
     l_list.head = Node(1)  # initialize first/head node
     # initialize subsequent nodes
     node2 = Node(2)
-    node3 = Node(3)
-    node4 = Node(4)
+    node3 = Node(4)
+    node4 = Node(3)
     # link the entire list together
     l_list.head.next = node2
     node2.next = node3
     node3.next = node4
 
     l_list.print_list()
-    l_list.insert_at_end( 5)
-    print("after adding")
+    l_list.sort_list()
+    print("after sort")
     l_list.print_list()
+    l_list
